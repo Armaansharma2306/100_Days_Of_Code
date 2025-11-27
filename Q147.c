@@ -1,39 +1,54 @@
-//Take two structs as input and check if they are identical.
+//Store employee data in a binary file using fwrite() and read using fread().
 
 #include <stdio.h>
-#include <string.h>
 
-// Define a structure
-struct Student {
-    int roll;
-    char name[50];
+struct Employee {
+    int id;
+    char name[30];
+    float salary;
 };
 
 int main() {
-    struct Student s1, s2;
+    struct Employee emp, empRead;
+    FILE *fp;
 
-    // Input for first structure
-    printf("Enter details for Student 1:\n");
-    printf("Roll number: ");
-    scanf("%d", &s1.roll);
-
-    printf("Name: ");
-    scanf("%s", s1.name);
-
-    // Input for second structure
-    printf("\nEnter details for Student 2:\n");
-    printf("Roll number: ");
-    scanf("%d", &s2.roll);
-
-    printf("Name: ");
-    scanf("%s", s2.name);
-
-    // Check if both structures are identical
-    if (s1.roll == s2.roll && strcmp(s1.name, s2.name) == 0) {
-        printf("\nBoth structures are IDENTICAL! 🎉\n");
-    } else {
-        printf("\nStructures are NOT identical 😬\n");
+    // ----------- Writing to Binary File -----------
+    fp = fopen("employee.dat", "wb");
+    if (!fp) {
+        printf("Error opening file!");
+        return 1;
     }
+
+    printf("Enter Employee ID: ");
+    scanf("%d", &emp.id);
+
+    printf("Enter Employee Name: ");
+    scanf("%s", emp.name);
+
+    printf("Enter Employee Salary: ");
+    scanf("%f", &emp.salary);
+
+    // Write struct to file
+    fwrite(&emp, sizeof(struct Employee), 1, fp);
+    fclose(fp);
+
+    printf("\nEmployee data stored successfully!\n");
+
+    // ----------- Reading from Binary File -----------
+    fp = fopen("employee.dat", "rb");
+    if (!fp) {
+        printf("Error opening file!");
+        return 1;
+    }
+
+    // Read struct from file
+    fread(&empRead, sizeof(struct Employee), 1, fp);
+    fclose(fp);
+
+    printf("\n--- Employee Details Read From File ---\n");
+    printf("ID      : %d\n", empRead.id);
+    printf("Name    : %s\n", empRead.name);
+    printf("Salary  : %.2f\n", empRead.salary);
 
     return 0;
 }
