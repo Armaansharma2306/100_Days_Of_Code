@@ -1,54 +1,46 @@
-//Store employee data in a binary file using fwrite() and read using fread().
+//Create Employee structure with nested Date structure for joining date and print details.
 
 #include <stdio.h>
 
+struct Date {
+    int day;
+    int month;
+    int year;
+};
+
 struct Employee {
+    char name[50];
     int id;
-    char name[30];
     float salary;
+    struct Date joining_date;   // nested structure
 };
 
 int main() {
-    struct Employee emp, empRead;
-    FILE *fp;
+    struct Employee e;
 
-    // ----------- Writing to Binary File -----------
-    fp = fopen("employee.dat", "wb");
-    if (!fp) {
-        printf("Error opening file!");
-        return 1;
-    }
+    printf("Enter employee name: ");
+    scanf("%s", e.name);
 
-    printf("Enter Employee ID: ");
-    scanf("%d", &emp.id);
+    printf("Enter employee ID: ");
+    scanf("%d", &e.id);
 
-    printf("Enter Employee Name: ");
-    scanf("%s", emp.name);
+    printf("Enter salary: ");
+    scanf("%f", &e.salary);
 
-    printf("Enter Employee Salary: ");
-    scanf("%f", &emp.salary);
+    printf("Enter joining date (DD MM YYYY): ");
+    scanf("%d %d %d",
+          &e.joining_date.day,
+          &e.joining_date.month,
+          &e.joining_date.year);
 
-    // Write struct to file
-    fwrite(&emp, sizeof(struct Employee), 1, fp);
-    fclose(fp);
-
-    printf("\nEmployee data stored successfully!\n");
-
-    // ----------- Reading from Binary File -----------
-    fp = fopen("employee.dat", "rb");
-    if (!fp) {
-        printf("Error opening file!");
-        return 1;
-    }
-
-    // Read struct from file
-    fread(&empRead, sizeof(struct Employee), 1, fp);
-    fclose(fp);
-
-    printf("\n--- Employee Details Read From File ---\n");
-    printf("ID      : %d\n", empRead.id);
-    printf("Name    : %s\n", empRead.name);
-    printf("Salary  : %.2f\n", empRead.salary);
+    printf("\n--- Employee Details ---\n");
+    printf("Name          : %s\n", e.name);
+    printf("ID            : %d\n", e.id);
+    printf("Salary        : %.2f\n", e.salary);
+    printf("Joining Date  : %02d-%02d-%04d\n",
+           e.joining_date.day,
+           e.joining_date.month,
+           e.joining_date.year);
 
     return 0;
 }
