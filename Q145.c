@@ -1,54 +1,49 @@
-//Store employee data in a binary file using fwrite() and read using fread().
+//Return a structure containing top student's details from a function.
 
 #include <stdio.h>
 
-struct Employee {
-    int id;
-    char name[30];
-    float salary;
+struct Student {
+    char name[50];
+    int roll_no;
+    float marks;
 };
 
+// Function to find and return the top student
+struct Student findTopStudent(struct Student s[], int n) {
+    int i, topIndex = 0;
+
+    for (i = 1; i < n; i++) {
+        if (s[i].marks > s[topIndex].marks) {
+            topIndex = i;
+        }
+    }
+
+    return s[topIndex];   // returning a structure
+}
+
 int main() {
-    struct Employee emp, empRead;
-    FILE *fp;
+    struct Student s[5], top;
+    int i;
 
-    // ----------- Writing to Binary File -----------
-    fp = fopen("employee.dat", "wb");
-    if (!fp) {
-        printf("Error opening file!");
-        return 1;
+    printf("Enter details of 5 students:\n");
+
+    for (i = 0; i < 5; i++) {
+        printf("\nStudent %d\n", i + 1);
+        printf("Enter name: ");
+        scanf("%s", s[i].name);
+        printf("Enter roll number: ");
+        scanf("%d", &s[i].roll_no);
+        printf("Enter marks: ");
+        scanf("%f", &s[i].marks);
     }
 
-    printf("Enter Employee ID: ");
-    scanf("%d", &emp.id);
+    // call the function and store returned structure
+    top = findTopStudent(s, 5);
 
-    printf("Enter Employee Name: ");
-    scanf("%s", emp.name);
-
-    printf("Enter Employee Salary: ");
-    scanf("%f", &emp.salary);
-
-    // Write struct to file
-    fwrite(&emp, sizeof(struct Employee), 1, fp);
-    fclose(fp);
-
-    printf("\nEmployee data stored successfully!\n");
-
-    // ----------- Reading from Binary File -----------
-    fp = fopen("employee.dat", "rb");
-    if (!fp) {
-        printf("Error opening file!");
-        return 1;
-    }
-
-    // Read struct from file
-    fread(&empRead, sizeof(struct Employee), 1, fp);
-    fclose(fp);
-
-    printf("\n--- Employee Details Read From File ---\n");
-    printf("ID      : %d\n", empRead.id);
-    printf("Name    : %s\n", empRead.name);
-    printf("Salary  : %.2f\n", empRead.salary);
+    printf("\n--- Top Student ---\n");
+    printf("Name      : %s\n", top.name);
+    printf("Roll No   : %d\n", top.roll_no);
+    printf("Marks     : %.2f\n", top.marks);
 
     return 0;
 }
